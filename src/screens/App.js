@@ -1,44 +1,81 @@
-import axios from "axios";
 import React, { useState } from "react";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/search-bar";
+import NotFound from "../components/not-found";
+import NoRecord from "../components/no-record";
+import ForecastView from "../components/forecast-view";
+import SearchHistory from "../components/search-history";
+import { QueryWeather } from "../requests/weather";
+import "./app.css";
 
-function App() {
-  const [query, setQuery] = useState();
-  const [weather, setWeather] = useState({
-    loading: true,
-    data: {},
-    error: false,
-  });
+const App = () => {
+  const [history, setHistory] = useState([
+    // { city: "Singapore", country: "Singapore", time: Date.now() },
+    // { city: "Xiang Ge Li La", country: "China", time: Date.now() },
+  ]);
+  const [weather, setWeather] = useState({ data: null, error: false });
 
-  const search = async (city, country) => {
-    setQuery("");
-    setWeather({ ...weather, loading: true });
-    const apiKey = "b03a640e5ef6980o4da35b006t5f2942";
-    const url = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+  const handleSearchHistory = (time) => {
+    const query = history.filter((item) => item.time === time)[0];
+    handleSearch(query.city, query.country);
+  };
 
-    await axios
-      .get(url)
-      .then((res) => {
-        console.log("res", res);
-        setWeather({ data: res.data, loading: false, error: false });
+  const handleDeleteHistory = (time) => {
+    setHistory(history.filter((item) => item.time !== time));
+  };
+
+  const insertHistory = (query) => {
+    const index = history.findIndex((item) => {
+      return item.city == query.city && item.country == query.country;
+    });
+
+    setHistory([
+      { ...query, time: Date.now() },
+      ...history.filter((item, idx) => index !== idx),
+    ]);
+  };
+
+  const handleSearch = (city, country) => {
+    QueryWeather(city, country)
+      .then((data) => {
+        insertHistory({ city, country });
+        setWeather({ error: false, data });
       })
-      .catch((error) => {
-        setWeather({ ...weather, data: {}, error: true });
-        console.log("error", error);
+      .catch((e) => {
+        setWeather({ error: true, data: null });
       });
   };
 
   return (
     <div className="App">
-      <h3 className="h3">Today's Weather</h3>
-      <div className="SectionLine"/>
-      <SearchBar query={query} search={search} />
+      <p className="h4 fw-bold">Today's Weather</p>
+      <div className="SectionLine" />
+      <SearchBar search={handleSearch} />
 
+      <div className="Forecast">
+        {weather.error && <NotFound />}
+        {weather.data && <ForecastView data={weather.data} />}
+      </div>
 
-      <h3 className="h3">Search History</h3>
-      <div className="SectionLine"/>
+      <p className="h4 fw-bold">Search History</p>
+      <div className="SectionLine" />
+
+      <div className="SearchHistoryContainer">
+        {history.length === 0 ? (
+          <NoRecord />
+        ) : (
+          history.map((item, index) => (
+            <SearchHistory
+              {...item}
+              key={item.time}
+              index={index}
+              onSearch={handleSearchHistory}
+              onDelete={handleDeleteHistory}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default App;

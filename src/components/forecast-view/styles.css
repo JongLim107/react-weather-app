@@ -1,0 +1,35 @@
+.ForecastView {
+  label {
+    color: gray;
+
+  }
+
+  strong {
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+  }
+}
+
+/* Desktop view */
+@media screen and (min-width: 768px) {
+  .ForecastView {
+    margin: 20px 25px 40px 25px;
+    width: 45%;
+  }
+}
+
+/* Small Screen Deivce */
+@media screen and (max-width: 767px) {
+  .ForecastView {
+    margin: 20px 0px 40px 0px;
+    width: 80%;
+  }
+}
+
+/* Mobile Deivce */
+@media screen and (max-width: 576px) {
+  .ForecastView {
+    margin: 20px 0px 40px 0px;
+    width: 100%;
+  }
+}

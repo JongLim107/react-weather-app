@@ -1,11 +1,11 @@
-
 export const FormInput = ({ label = "", value, onChange }) => {
   return (
-    <div className="row m-5">
+    <div>
       <label>{label}:</label>
       <input
+        required
         type="text"
-        name={label.toLocaleLowerCase()}
+        name={label}
         value={value}
         onChange={onChange}
       />

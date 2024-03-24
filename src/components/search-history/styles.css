@@ -1,0 +1,45 @@
+.SearchHistory {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  margin-top: 25px;
+  border-bottom: 1px solid;
+  border-bottom-color: gray;
+
+  button {
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    margin-left: 10px;
+  }
+
+  .TextContainer {
+    flex-grow: 1;
+    align-items: end;
+  }
+
+  .BtnContainer {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+/* Desktop view */
+@media screen and (min-width: 768px) {
+  .SearchHistory {
+    padding-bottom: 10px;
+  }
+
+  .HistoryTime {
+    text-align: end;
+  }
+}
+
+/* Small Screen Deivce */
+@media screen and (max-width: 767px) {
+  .HistoryTime {
+    text-align: start;
+    margin-left: 15px;
+  }
+}
