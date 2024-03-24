@@ -2,13 +2,18 @@ import dayjs from "dayjs";
 import "./styles.css";
 
 const SearchHistory = ({ index, city, country, time, onSearch, onDelete }) => {
+  let queryStr = ++index + ". " + city + ", " + country;
+  if (queryStr.endsWith(", ")) {
+    queryStr = queryStr.replace(", ", "");
+  }
+
   return (
     <div className="SearchHistory">
       <div className="row TextContainer">
-        <div className="col-md-6">
-          {++index}. {city}, {country}
+        <div className="col-md-6">{queryStr}</div>
+        <div className="col-md-6 HistoryTime">
+          {dayjs().format("hh:mm:ss A")}
         </div>
-        <div className="col-md-6 HistoryTime">{dayjs().format("hh:mm:ss A")}</div>
       </div>
 
       <div className="BtnContainer">
